@@ -1,0 +1,13 @@
+[package]
+name = "mantid-idf"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+anyhow = "1.0.89"
+nalgebra = { version = "0.33.1", default-features = false, features = ["std"] }
+quick-xml = { version = "0.36.2", default-features = false }
+
+[dev-dependencies]
+three-d = "0.17.0"
+tokio = { version = "1.16", features = ["macros", "rt-multi-thread"] }

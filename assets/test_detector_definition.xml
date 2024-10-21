@@ -1,0 +1,242 @@
+<?xml version='1.0' encoding='ASCII'?>
+<instrument xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.mantidproject.org/IDF/1.0" last-modified="2024-10-18 12:01:44.11111" name="Test" valid-from="2024-10-18 00:00:01" valid-to="2100-01-31 23:59:59" xsi:schemaLocation="http://www.mantidproject.org/IDF/1.0 http://schema.mantidproject.org/IDF/1.0/IDFSchema.xsd">')
+  <!--Created by Noah Nachtigall-->
+  <!--DEFAULTS-->
+  <defaults>
+    <length unit="metre"/>
+    <angle unit="degree"/>
+    <reference-frame>
+      <along-beam axis="z"/>
+      <pointing-up axis="y"/>
+      <!--along-beam axis="x"/>
+      <pointing-up axis="z"/-->
+      <handedness val="right"/>
+    </reference-frame>
+    <!--default-view view="3D" axis-view="x-"/-->
+  </defaults>
+  
+  <!--SOURCE-->
+  <component type="moderator">
+    <location z="-10.0"/>
+  </component>
+  <type is="Source" name="moderator"/>
+  <!--SAMPLE-->
+  <component type="sample-position">
+    <location x="0.0" y="0.0" z="0.0"/>
+  </component>
+  <type is="SamplePos" name="sample-position"/>
+
+  <component type="VoxelsRoot" idlist="ids">
+    <location />
+  </component>
+  <type name="VoxelsRoot">
+    <component type="Voxels">
+      <location>
+        <rot val="-90" axis-x="1" axis-y="0" axis-z="0">
+          <rot val="-90" axis-x="0" axis-y="0" axis-z="1" />
+        </rot>
+      </location>
+    </component>
+  </type>
+  <type name="Voxels">
+    <component type="X00">
+      <locations n-elements="5" rot="-40.0" rot-end="200.0" axis-x="1.0" axis-y="0.0" axis-z="0.0" name="X0" name-count-start="1" />
+    </component>
+  </type>
+  <type name="X00">
+    <component type="X00A">
+      <location/>
+    </component>
+    <component type="X00B">
+      <location/>
+    </component>
+  </type>
+  <type name="X00A">
+    <component type="Y0A0">
+      <location x="0.79153" y="0.80989" z="0.00987" />
+    </component>
+    <component type="Y0A1">
+      <location x="0.80762" y="0.82530" z="0.00739" />
+    </component>
+    <component type="Y0A2">
+      <location x="0.82373" y="0.84070" z="0.00492" />
+    </component>
+    <component type="Y0A3">
+      <location x="0.83984" y="0.85610" z="0.00244" />
+    </component>
+    <component type="Y0A4">
+      <location x="0.85596" y="0.87150" z="-0.00004" />
+    </component>
+  </type>
+  
+  <type name="X00B">
+    <component type="Y0B0">
+      <location x="0.79023" y="0.80871" z="0.00275" />
+    </component>
+    <component type="Y0B1">
+      <location x="0.80632" y="0.82408" z="0.00011" />
+    </component>
+    <component type="Y0B2">
+      <location x="0.82242" y="0.83946" z="-0.00253" />
+    </component>
+    <component type="Y0B3">
+      <location x="0.83853" y="0.85484" z="-0.00517" />
+    </component>
+    <component type="Y0B4">
+      <location x="0.85464" y="0.87021" z="-0.00781" />
+    </component>
+  </type>
+  
+  <type is="detector" name="Y0A0">
+    <hexahedron id="100000">
+      <left-back-bottom-point   x="0.00218" y="0.00828" z="0.00247" />
+      <left-front-bottom-point  x="-0.01378" y="-0.00713" z="0.00488" />
+      <right-front-bottom-point x="-0.00094" y="-0.00713" z="0.00488" />
+      <right-back-bottom-point  x="0.01528" y="0.00828" z="0.00247" />
+      <left-back-top-point      x="0.00094" y="0.00716" z="-0.00469" />
+      <left-front-top-point     x="-0.01502" y="-0.00823" z="-0.00214" />
+      <right-front-top-point    x="-0.00220" y="-0.00823" z="-0.00214" />
+      <right-back-top-point     x="0.01402" y="0.00716" z="-0.00469" />
+    </hexahedron>
+    <algebra val="100000"/>
+  </type>
+  
+  <type is="detector" name="Y0A1">
+    <hexahedron id="100001">
+      <left-back-bottom-point   x="0.00205" y="0.00829" z="0.00254" />
+      <left-front-bottom-point  x="-0.01392" y="-0.00712" z="0.00495" />
+      <right-front-bottom-point x="-0.00081" y="-0.00712" z="0.00495" />
+      <right-back-bottom-point  x="0.01542" y="0.00829" z="0.00254" />
+      <left-back-top-point      x="0.00081" y="0.00715" z="-0.00478" />
+      <left-front-top-point     x="-0.01516" y="-0.00824" z="-0.00222" />
+      <right-front-top-point    x="-0.00208" y="-0.00824" z="-0.00222" />
+      <right-back-top-point     x="0.01415" y="0.00715" z="-0.00478" />
+    </hexahedron>
+    <algebra val="100001"/>
+  </type>
+  
+  <type is="detector" name="Y0A2">
+    <hexahedron id="100002">
+      <left-back-bottom-point   x="0.00192" y="0.00830" z="0.00261" />
+      <left-front-bottom-point  x="-0.01406" y="-0.00711" z="0.00502" />
+      <right-front-bottom-point x="-0.00069" y="-0.00711" z="0.00502" />
+      <right-back-bottom-point  x="0.01556" y="0.00830" z="0.00261" />
+      <left-back-top-point      x="0.00068" y="0.00714" z="-0.00486" />
+      <left-front-top-point     x="-0.01530" y="-0.00825" z="-0.00230" />
+      <right-front-top-point    x="-0.00195" y="-0.00825" z="-0.00230" />
+      <right-back-top-point     x="0.01429" y="0.00714" z="-0.00486" />
+    </hexahedron>
+    <algebra val="100002"/>
+  </type>
+  
+  <type is="detector" name="Y0A3">
+    <hexahedron id="100003">
+      <left-back-bottom-point   x="0.00179" y="0.00831" z="0.00268" />
+      <left-front-bottom-point  x="-0.01419" y="-0.00710" z="0.00509" />
+      <right-front-bottom-point x="-0.00056" y="-0.00710" z="0.00509" />
+      <right-back-bottom-point  x="0.01569" y="0.00831" z="0.00268" />
+      <left-back-top-point      x="0.00055" y="0.00712" z="-0.00494" />
+      <left-front-top-point     x="-0.01544" y="-0.00827" z="-0.00238" />
+      <right-front-top-point    x="-0.00182" y="-0.00827" z="-0.00238" />
+      <right-back-top-point     x="0.01442" y="0.00712" z="-0.00494" />
+    </hexahedron>
+    <algebra val="100003"/>
+  </type>
+  
+  <type is="detector" name="Y0A4">
+    <hexahedron id="100004">
+      <left-back-bottom-point   x="0.00167" y="0.00832" z="0.00275" />
+      <left-front-bottom-point  x="-0.01433" y="-0.00709" z="0.00516" />
+      <right-front-bottom-point x="-0.00043" y="-0.00709" z="0.00516" />
+      <right-back-bottom-point  x="0.01583" y="0.00832" z="0.00275" />
+      <left-back-top-point      x="0.00042" y="0.00711" z="-0.00502" />
+      <left-front-top-point     x="-0.01557" y="-0.00828" z="-0.00246" />
+      <right-front-top-point    x="-0.00170" y="-0.00828" z="-0.00246" />
+      <right-back-top-point     x="0.01456" y="0.00711" z="-0.00502" />
+    </hexahedron>
+    <algebra val="100004"/>
+  </type>
+  
+  <type is="detector" name="Y0B0">
+    <hexahedron id="200000">
+      <left-back-bottom-point   x="0.00086" y="0.00704" z="-0.00502" />
+      <left-front-bottom-point  x="-0.01510" y="-0.00833" z="-0.00231" />
+      <right-front-bottom-point x="-0.00230" y="-0.00833" z="-0.00231" />
+      <right-back-bottom-point  x="0.01392" y="0.00704" z="-0.00502" />
+      <left-back-top-point      x="0.00218" y="0.00829" z="0.00212" />
+      <left-front-top-point     x="-0.01378" y="-0.00709" z="0.00468" />
+      <right-front-top-point    x="-0.00096" y="-0.00709" z="0.00468" />
+      <right-back-top-point     x="0.01526" y="0.00829" z="0.00212" />
+    </hexahedron>
+    <algebra val="200000"/>
+  </type>
+  
+  <type is="detector" name="Y0B1">
+    <hexahedron id="200001">
+      <left-back-bottom-point   x="0.00073" y="0.00702" z="-0.00509" />
+      <left-front-bottom-point  x="-0.01523" y="-0.00834" z="-0.00238" />
+      <right-front-bottom-point x="-0.00217" y="-0.00834" z="-0.00238" />
+      <right-back-bottom-point  x="0.01406" y="0.00702" z="-0.00509" />
+      <left-back-top-point      x="0.00206" y="0.00831" z="0.00221" />
+      <left-front-top-point     x="-0.01391" y="-0.00708" z="0.00476" />
+      <right-front-top-point    x="-0.00083" y="-0.00708" z="0.00476" />
+      <right-back-top-point     x="0.01540" y="0.00831" z="0.00221" />
+    </hexahedron>
+    <algebra val="200001"/>
+  </type>
+  
+  <type is="detector" name="Y0B2">
+    <hexahedron id="200002">
+      <left-back-bottom-point   x="0.00061" y="0.00701" z="-0.00516" />
+      <left-front-bottom-point  x="-0.01537" y="-0.00835" z="-0.00245" />
+      <right-front-bottom-point x="-0.00204" y="-0.00835" z="-0.00245" />
+      <right-back-bottom-point  x="0.01419" y="0.00701" z="-0.00516" />
+      <left-back-top-point      x="0.00193" y="0.00832" z="0.00229" />
+      <left-front-top-point     x="-0.01404" y="-0.00707" z="0.00485" />
+      <right-front-top-point    x="-0.00070" y="-0.00707" z="0.00485" />
+      <right-back-top-point     x="0.01554" y="0.00832" z="0.00229" />
+    </hexahedron>
+    <algebra val="200002"/>
+  </type>
+  
+  <type is="detector" name="Y0B3">
+    <hexahedron id="200003">
+      <left-back-bottom-point   x="0.00048" y="0.00700" z="-0.00522" />
+      <left-front-bottom-point  x="-0.01550" y="-0.00836" z="-0.00252" />
+      <right-front-bottom-point x="-0.00191" y="-0.00836" z="-0.00252" />
+      <right-back-bottom-point  x="0.01433" y="0.00700" z="-0.00522" />
+      <left-back-top-point      x="0.00181" y="0.00834" z="0.00237" />
+      <left-front-top-point     x="-0.01418" y="-0.00705" z="0.00493" />
+      <right-front-top-point    x="-0.00057" y="-0.00705" z="0.00493" />
+      <right-back-top-point     x="0.01568" y="0.00834" z="0.00237" />
+    </hexahedron>
+    <algebra val="200003"/>
+  </type>
+  
+  <type is="detector" name="Y0B4">
+    <hexahedron id="200004">
+      <left-back-bottom-point   x="0.00035" y="0.00699" z="-0.00529" />
+      <left-front-bottom-point  x="-0.01564" y="-0.00838" z="-0.00258" />
+      <right-front-bottom-point x="-0.00179" y="-0.00838" z="-0.00258" />
+      <right-back-bottom-point  x="0.01447" y="0.00699" z="-0.00529" />
+      <left-back-top-point      x="0.00168" y="0.00835" z="0.00245" />
+      <left-front-top-point     x="-0.01431" y="-0.00704" z="0.00501" />
+      <right-front-top-point    x="-0.00043" y="-0.00704" z="0.00501" />
+      <right-back-top-point     x="0.01582" y="0.00835" z="0.00245" />
+    </hexahedron>
+    <algebra val="200004"/>
+  </type>
+  
+  <idlist idname="ids">
+    <id start="100000" end="100005" />
+    <id start="105000" end="105005" />
+	<id start="200000" end="200005" />
+    <id start="205000" end="205005" />
+	<id start="300000" end="300005" />
+    <id start="305000" end="305005" />
+	<id start="400000" end="400005" />
+    <id start="405000" end="405005" />
+	<id start="500000" end="500005" />
+    <id start="505000" end="505005" />
+  </idlist>
+</instrument>
