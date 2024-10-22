@@ -2,9 +2,12 @@ use quick_xml::events::attributes::Attribute;
 
 use anyhow::Ok;
 
+use crate::idlists::IDEntry;
 use crate::structs::{Response, Rotation, Translation, Type};
 use crate::utils::{add_suffix, parse_attribute};
 use crate::Point;
+
+use super::Component;
 
 pub trait TryMatchAttribute: Sized {
     fn try_match_attribute(
@@ -178,6 +181,65 @@ impl TryMatchAttribute for Type {
                 );
             }
         };
+
+        Ok(response)
+    }
+}
+
+impl TryMatchAttribute for Component {
+    fn try_match_attribute(
+        self_option: &mut Option<Self>,
+        attribute: &Attribute<'_>,
+        _suffix: Option<&str>,
+    ) -> anyhow::Result<Response> {
+        let mut response = Response { match_found: true };
+
+        let component = self_option.get_or_insert_default();
+
+        let key = attribute.key.as_ref();
+
+        match key {
+            b"type" => {
+                component.type_name = std::str::from_utf8(&attribute.value)?.to_string();
+            }
+            b"" => {
+                response.match_found = false;
+            }
+            _ => {
+                component.other_attributes.insert(
+                    std::str::from_utf8(key)?.to_string(),
+                    std::str::from_utf8(&attribute.value)?.to_string(),
+                );
+            }
+        };
+
+        Ok(response)
+    }
+}
+
+impl TryMatchAttribute for IDEntry {
+    fn try_match_attribute(
+        self_option: &mut Option<Self>,
+        attribute: &Attribute<'_>,
+        _suffix: Option<&str>,
+    ) -> anyhow::Result<Response> {
+        let mut response = Response { match_found: true };
+
+        let id_entry = self_option.get_or_insert_default();
+
+        let key = attribute.key.as_ref();
+
+        match key {
+            b"start" => {
+                id_entry.start = parse_attribute(&attribute.value)?;
+            }
+            b"end" => {
+                id_entry.end = parse_attribute(&attribute.value)?;
+            }
+            _ => {
+                response.match_found = false;
+            }
+        }
 
         Ok(response)
     }

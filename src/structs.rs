@@ -38,6 +38,9 @@ pub struct Component {
     /// Represents the `locations` tag in the IDF file. \
     /// Contains the translation and rotation of the component for multiple elements.
     pub locations: Vec<Locations>,
+    /// Other attributes that the component can have. \
+    /// "Catch-all" for attributes to avoid many `Option` fields. TODO: Better solution?
+    pub other_attributes: BTreeMap<String, String>,
 }
 
 impl Component {

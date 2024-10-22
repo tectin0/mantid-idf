@@ -9,6 +9,7 @@ use nalgebra::{Rotation3, Translation3};
 use crate::{
     structs::{Component, Type},
     types::{SpecialTypes, Types},
+    utils::Axes,
     Point,
 };
 
@@ -205,13 +206,31 @@ impl ComponentTreeNode {
         }
     }
 
-    /// TODO: Add documentation
-    pub fn get_transformed_points(
+    /// Returns the points of any special type, transformed by the node and all previous parents \
+    /// TODO: Add example + more explanation
+    pub fn get_special_type_points(&self) -> Vec<Point> {
+        let translations = vec![];
+        let rotations = vec![];
+
+        let (points, _ids) = self.recursive_transform_points(translations, rotations);
+
+        points
+    }
+
+    /// Recursively transforms the points of the node and its children \
+    /// Recursion ends on nodes with no children or nodes with a special type \
+    /// Returns a tuple of the transformed points and their ids \
+    ///
+    /// The ids don't have to be specified by any of the components &rarr; They are then typically defined in the `IDList` \
+    ///
+    /// TODO: Add example + more explanation
+    pub fn recursive_transform_points(
         &self,
         translations: Vec<Translation3<f32>>,
         rotations: Vec<Rotation3<f32>>,
-    ) -> Vec<Point> {
+    ) -> (Vec<Point>, Vec<u32>) {
         let mut points = Vec::new();
+        let mut ids = Vec::new();
 
         if self.component.is_root() {
             let new_translations = vec![];
@@ -219,13 +238,14 @@ impl ComponentTreeNode {
 
             self.extend_points_with_children_points(
                 &mut points,
+                &mut ids,
                 new_translations,
                 new_rotations,
                 &translations,
                 &rotations,
             );
 
-            return points;
+            return (points, ids);
         }
 
         let no_children = self.children.is_empty();
@@ -276,15 +296,57 @@ impl ComponentTreeNode {
                     .parse::<f32>()
                     .unwrap();
 
+                let idfillbyfirst = self
+                    .component
+                    .other_attributes
+                    .get("idfillbyfirst")
+                    .unwrap()
+                    .parse::<Axes>()
+                    .unwrap();
+
+                let idstart = self
+                    .component
+                    .other_attributes
+                    .get("idstart")
+                    .unwrap()
+                    .parse::<u32>()
+                    .unwrap();
+
+                let idstepbyrow = self
+                    .component
+                    .other_attributes
+                    .get("idstepbyrow")
+                    .unwrap()
+                    .parse::<u32>()
+                    .unwrap();
+
                 let mut untransformed_points = Vec::new();
+                let mut ids_ = Vec::new();
+
+                let mut id = idstart;
 
                 for x in 0..xpixels {
                     for y in 0..ypixels {
                         let x = xstart + x as f32 * xstep;
                         let y = ystart + y as f32 * ystep;
 
-                        untransformed_points.push(Point::new(x, y, 0.0));
+                        let point = Point::new(x, y, 0.0);
+
+                        untransformed_points.push(point);
+                        ids_.push(id);
+
+                        id = match idfillbyfirst {
+                            Axes::X => id + idstepbyrow,
+                            Axes::Y => id + 1,
+                            _ => unreachable!("idfillbyfirst should be either X or Y"),
+                        };
                     }
+
+                    id = match idfillbyfirst {
+                        Axes::X => id + idstepbyrow,
+                        Axes::Y => id + 1,
+                        _ => unreachable!("idfillbyfirst should be either X or Y"),
+                    };
                 }
 
                 for location in self.component.location.iter() {
@@ -302,6 +364,7 @@ impl ComponentTreeNode {
                     });
 
                     points.extend(untransformed_points.clone());
+                    ids.extend(ids_.clone());
                 }
             }
             SpecialTypes::Detector => {
@@ -356,13 +419,14 @@ impl ComponentTreeNode {
 
                             self.extend_points_with_children_points(
                                 &mut points,
+                                &mut ids,
                                 new_translations,
                                 new_rotations,
                                 &translations,
                                 &rotations,
                             );
 
-                            return points;
+                            return (points, ids);
                         }
                     }
                 }
@@ -373,6 +437,7 @@ impl ComponentTreeNode {
 
                     self.extend_points_with_children_points(
                         &mut points,
+                        &mut ids,
                         new_translations,
                         new_rotations,
                         &translations,
@@ -387,6 +452,7 @@ impl ComponentTreeNode {
 
                         self.extend_points_with_children_points(
                             &mut points,
+                            &mut ids,
                             new_translations,
                             new_rotations,
                             &translations,
@@ -398,34 +464,34 @@ impl ComponentTreeNode {
             _ => (),
         }
 
-        points
+        (points, ids)
     }
 
     fn extend_points_with_children_points(
         &self,
         points: &mut Vec<Point>,
+        ids: &mut Vec<u32>,
         new_translations: Vec<Translation3<f32>>,
         new_rotations: Vec<Rotation3<f32>>,
         translations: &Vec<Translation3<f32>>,
         rotations: &Vec<Rotation3<f32>>,
     ) {
         for child in self.children.iter() {
-            points.extend(
-                child
-                    .get_transformed_points(new_translations.clone(), new_rotations.clone())
-                    .into_iter()
-                    .map(|mut p| {
-                        for translation in translations.iter() {
-                            p = translation.transform_point(&p);
-                        }
+            let (mut child_points, child_ids) =
+                child.recursive_transform_points(new_translations.clone(), new_rotations.clone());
 
-                        for rotation in rotations.iter() {
-                            p = rotation.transform_point(&p);
-                        }
+            child_points.iter_mut().for_each(|p| {
+                for translation in translations.iter() {
+                    *p = translation.transform_point(&p);
+                }
 
-                        p
-                    }),
-            );
+                for rotation in rotations.iter() {
+                    *p = rotation.transform_point(&p);
+                }
+            });
+
+            points.extend(child_points);
+            ids.extend(child_ids);
         }
     }
 }

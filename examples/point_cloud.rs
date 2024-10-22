@@ -14,7 +14,7 @@ fn get_center_points() -> Vec<[f32; 3]> {
 
     let root = detector_definition.component_tree;
 
-    let points = root.get_transformed_points(Vec::new(), Vec::new());
+    let points = root.get_special_type_points();
 
     points.into_iter().map(|p| [p.x, p.y, p.z]).collect()
 }

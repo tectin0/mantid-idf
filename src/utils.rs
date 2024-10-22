@@ -39,3 +39,25 @@ pub(crate) fn spherical_to_cartesian(point_in_spherical_coordinates: Point) -> P
 
     Point::new(x, y, z)
 }
+
+/// The axes of a 3D coordinate system.
+#[allow(missing_docs)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub enum Axes {
+    X,
+    Y,
+    Z,
+}
+
+impl std::str::FromStr for Axes {
+    type Err = anyhow::Error;
+
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "x" => Ok(Self::X),
+            "y" => Ok(Self::Y),
+            "z" => Ok(Self::Z),
+            _ => Err(anyhow::anyhow!("could not parse string: {:?} to Axes", s)),
+        }
+    }
+}

@@ -16,6 +16,7 @@ use try_match_bytes_start::TryMatchBytesStart;
 use crate::component_tree::ComponentTree;
 use crate::detector_definition::DetectorDefinition;
 
+use crate::idlists::IDList;
 use crate::structs::*;
 use crate::types::Types;
 
@@ -30,11 +31,15 @@ pub(crate) fn detector_definition_from_str(str: &str) -> anyhow::Result<Detector
 
     let mut types = Types::default();
 
+    let mut id_lists = BTreeMap::<String, IDList>::new();
+
     let mut current_component = None;
 
     let mut current_type: Option<Type> = None;
 
     let mut current_hexahedron: Option<Hexahedron> = None;
+
+    let mut current_id_list = None;
 
     loop {
         match reader.read_event_into(&mut buf) {
@@ -63,6 +68,13 @@ pub(crate) fn detector_definition_from_str(str: &str) -> anyhow::Result<Detector
 
                 if Hexahedron::try_match_bytes_start(&mut current_hexahedron, &bytes_start, None)
                     .context("could not parse hexahedron from start event")?
+                    .match_found()
+                {
+                    continue;
+                }
+
+                if IDList::try_match_bytes_start(&mut current_id_list, &bytes_start, None)
+                    .context("could not parse id list from start event")?
                     .match_found()
                 {
                     continue;
@@ -120,6 +132,11 @@ pub(crate) fn detector_definition_from_str(str: &str) -> anyhow::Result<Detector
                         current_type.get_or_insert_default().hexahedron = Some(hexahedron);
                     }
                 }
+                b"idlist" => {
+                    if let Some(id_list) = current_id_list.take() {
+                        id_lists.insert(id_list.name.clone(), id_list);
+                    }
+                }
                 _ => (),
             },
             Ok(Event::Empty(bytes_start)) => {
@@ -132,6 +149,13 @@ pub(crate) fn detector_definition_from_str(str: &str) -> anyhow::Result<Detector
                         .context("Type is None even though it should not be")?;
 
                     types.insert(type_.name.clone(), type_);
+                }
+
+                if IDList::try_match_bytes_start(&mut current_id_list, &bytes_start, None)
+                    .context("could not parse id list from start event")?
+                    .match_found()
+                {
+                    continue;
                 }
 
                 let mut location = None;
@@ -196,5 +220,6 @@ pub(crate) fn detector_definition_from_str(str: &str) -> anyhow::Result<Detector
     Ok(DetectorDefinition {
         types: types_pointer,
         component_tree: component_trees,
+        id_lists,
     })
 }

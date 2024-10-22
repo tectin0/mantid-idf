@@ -2,6 +2,7 @@ use anyhow::Context;
 use quick_xml::events::BytesStart;
 
 use crate::{
+    idlists::{IDEntry, IDList},
     structs::{Component, Hexahedron, Location, Locations, Response, Rotation, Translation, Type},
     utils::parse_attribute,
     Point,
@@ -273,6 +274,53 @@ impl TryMatchBytesStart for Component {
                     .value;
 
                 component.type_name = std::str::from_utf8(&type_)?.to_string();
+            }
+            _ => (),
+        }
+
+        Ok(response)
+    }
+}
+
+impl TryMatchBytesStart for IDList {
+    fn try_match_bytes_start(
+        self_option: &mut Option<Self>,
+        bytes_start: &BytesStart<'_>,
+        _suffix: Option<&str>,
+    ) -> anyhow::Result<Response> {
+        let mut response = Response::default();
+
+        match bytes_start.name().as_ref() {
+            b"idlist" => {
+                response.match_found = true;
+
+                let id_list = self_option.get_or_insert_default();
+
+                let id = bytes_start
+                    .try_get_attribute("idname")?
+                    .context("could not get idname of IDList")?
+                    .value;
+
+                id_list.name = parse_attribute(&id)?;
+            }
+            b"id" => {
+                response.match_found = true;
+
+                let id_list = self_option
+                    .as_mut()
+                    .context("Can't have an `id` tag outside of an `idlist` tag")?;
+
+                let mut id_entry = None;
+
+                for attribute in bytes_start.attributes() {
+                    if let Ok(attribute) = attribute {
+                        IDEntry::try_match_attribute(&mut id_entry, &attribute, None)?;
+                    }
+                }
+
+                if let Some(id_entry) = id_entry {
+                    id_list.entries.push(id_entry);
+                }
             }
             _ => (),
         }

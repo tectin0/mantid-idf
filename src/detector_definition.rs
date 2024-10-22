@@ -1,11 +1,12 @@
 //! Module for the main instrument definition struct.
 
-use std::sync::Arc;
+use std::{collections::BTreeMap, sync::Arc};
 
 use anyhow::Context;
 
 use crate::{
-    component_tree::ComponentTree, types::Types, xml_parser::detector_definition_from_str,
+    component_tree::ComponentTree, idlists::IDList, types::Types,
+    xml_parser::detector_definition_from_str,
 };
 
 /// Main instrument definition struct. \
@@ -34,6 +35,8 @@ pub struct DetectorDefinition {
     pub types: Arc<Types>,
     /// The component tree.
     pub component_tree: ComponentTree,
+    /// Potential ID lists.
+    pub id_lists: BTreeMap<String, IDList>,
 }
 
 impl DetectorDefinition {
