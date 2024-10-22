@@ -5,7 +5,7 @@ use std::collections::BTreeMap;
 
 use nalgebra::{Rotation3, Translation3};
 
-use crate::{types::SpecialTypes, utils::spherical_to_cartesian, Point};
+use crate::{shapes::Shapes, types::SpecialTypes, utils::spherical_to_cartesian, Point};
 
 /// Represents the type of a component.
 /// Can contain other components.
@@ -18,9 +18,8 @@ pub struct Type {
     pub name: String,
     /// The components that are part of this type.
     pub components: Vec<Component>,
-    /// The possible hexahedron for this type. \
-    /// TODO: Other possible geometric shapes are missing here. `Cuboid` for example. -> Maybe a `Shape` enum?
-    pub hexahedron: Option<Hexahedron>,
+    /// The shape that the type has. \
+    pub shape: Option<Shapes>,
     /// Other attributes that the type can have. \
     /// "Catch-all" for attributes to avoid many `Option` fields. TODO: Better solution?
     pub other_attributes: BTreeMap<String, String>,
@@ -236,37 +235,6 @@ impl Locations {
                 }
             }
             (new_translations, new_rotations)
-        }
-    }
-}
-
-/// Represents a hexahedron in the IDF file.
-#[allow(missing_docs)]
-#[derive(Debug, Default, Clone)]
-pub struct Hexahedron {
-    pub id: u32,
-    pub left_back_bottom_point: Point,
-    pub left_front_bottom_point: Point,
-    pub right_front_bottom_point: Point,
-    pub right_back_bottom_point: Point,
-    pub left_back_top_point: Point,
-    pub left_front_top_point: Point,
-    pub right_front_top_point: Point,
-    pub right_back_top_point: Point,
-}
-
-impl Hexahedron {
-    pub(crate) fn get_mut(&mut self, key: &[u8]) -> Option<&mut Point> {
-        match key {
-            b"left-back-bottom-point" => Some(&mut self.left_back_bottom_point),
-            b"left-front-bottom-point" => Some(&mut self.left_front_bottom_point),
-            b"right-front-bottom-point" => Some(&mut self.right_front_bottom_point),
-            b"right-back-bottom-point" => Some(&mut self.right_back_bottom_point),
-            b"left-back-top-point" => Some(&mut self.left_back_top_point),
-            b"left-front-top-point" => Some(&mut self.left_front_top_point),
-            b"right-front-top-point" => Some(&mut self.right_front_top_point),
-            b"right-back-top-point" => Some(&mut self.right_back_top_point),
-            _ => None,
         }
     }
 }

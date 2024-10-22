@@ -80,9 +80,9 @@ fn main() {
 
             let type_ = types.get(&component.type_name).unwrap();
 
-            let hexahedron = type_.hexahedron.as_ref().unwrap();
+            let shape = type_.shape.as_ref().unwrap();
 
-            dbg!(hexahedron);
+            dbg!(shape);
         }
     }
 }

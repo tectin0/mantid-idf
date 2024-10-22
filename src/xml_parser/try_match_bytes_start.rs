@@ -3,7 +3,8 @@ use quick_xml::events::BytesStart;
 
 use crate::{
     idlists::{IDEntry, IDList},
-    structs::{Component, Hexahedron, Location, Locations, Response, Rotation, Translation, Type},
+    shapes::Hexahedron,
+    structs::{Component, Location, Locations, Response, Rotation, Translation, Type},
     utils::parse_attribute,
     Point,
 };

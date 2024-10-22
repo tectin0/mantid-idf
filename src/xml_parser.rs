@@ -17,6 +17,7 @@ use crate::component_tree::ComponentTree;
 use crate::detector_definition::DetectorDefinition;
 
 use crate::idlists::IDList;
+use crate::shapes::Hexahedron;
 use crate::structs::*;
 use crate::types::Types;
 
@@ -129,7 +130,8 @@ pub(crate) fn detector_definition_from_str(str: &str) -> anyhow::Result<Detector
                 }
                 b"hexahedron" => {
                     if let Some(hexahedron) = current_hexahedron.take() {
-                        current_type.get_or_insert_default().hexahedron = Some(hexahedron);
+                        current_type.get_or_insert_default().shape =
+                            Some(crate::shapes::Shapes::Hexahedron(hexahedron));
                     }
                 }
                 b"idlist" => {

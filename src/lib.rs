@@ -7,6 +7,7 @@
 pub mod component_tree;
 pub mod detector_definition;
 pub mod idlists;
+pub mod shapes;
 pub mod structs;
 pub mod types;
 pub mod utils;
