@@ -3,6 +3,7 @@
 https://mantidproject.org/ (not affilliated)
 
 ## Not feature complete / bug free
+### Only works on nightly channel (for now) - uses `Option::get_or_insert_default(..)` from nightly
 
 The library offers the ability to read Mantid instrument definition files (.xml) into a tree struct and provides a (small) range of useful functions.
 
