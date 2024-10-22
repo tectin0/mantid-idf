@@ -228,15 +228,15 @@
   </type>
   
   <idlist idname="ids">
-    <id start="100000" end="100005" />
-    <id start="105000" end="105005" />
-	<id start="200000" end="200005" />
-    <id start="205000" end="205005" />
-	<id start="300000" end="300005" />
-    <id start="305000" end="305005" />
-	<id start="400000" end="400005" />
-    <id start="405000" end="405005" />
-	<id start="500000" end="500005" />
-    <id start="505000" end="505005" />
+    <id start="100000" end="100004" />
+    <id start="105000" end="105004" />
+	<id start="200000" end="200004" />
+    <id start="205000" end="205004" />
+	<id start="300000" end="300004" />
+    <id start="305000" end="305004" />
+	<id start="400000" end="400004" />
+    <id start="405000" end="405004" />
+	<id start="500000" end="500004" />
+    <id start="505000" end="505004" />
   </idlist>
 </instrument>
